@@ -269,11 +269,11 @@ namespace Nerven.Assertion
         private static Func<MustAssertException, Exception> _CreateExceptionConstructor(Type exceptionType)
         {
             var _constructor = exceptionType.GetConstructors()
-                .Select(_c => new
-                {
-                    Info = _c,
-                    Parameters = _c.GetParameters(),
-                })
+                    .Select(_c => new
+                    {
+                        Info = _c,
+                        Parameters = _c.GetParameters(),
+                    })
                 .Select(_c => new
                     {
                         _c.Info,
