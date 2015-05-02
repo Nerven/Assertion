@@ -12,17 +12,13 @@ namespace Nerven.Assertion
 {
     public sealed class MustAssert
     {
-        private static readonly MustAssert _Instance = new MustAssert();
         private static readonly ConcurrentDictionary<Type, Func<MustAssertException, Exception>> _ExceptionConstructors = new ConcurrentDictionary<Type, Func<MustAssertException, Exception>>();
 
         private MustAssert()
         {
         }
 
-        public static MustAssert Instance
-        {
-            get { return _Instance; }
-        }
+        public static MustAssert Instance { get; } = new MustAssert();
 
         //// ReSharper disable ExplicitCallerInfoArgument
         [DebuggerHidden]
@@ -35,7 +31,7 @@ namespace Nerven.Assertion
         {
             if (assertion == null)
             {
-                throw new ArgumentNullException("assertion");
+                throw new ArgumentNullException(nameof(assertion));
             }
 
             return Assert(
@@ -76,7 +72,7 @@ namespace Nerven.Assertion
         {
             if (assertion == null)
             {
-                throw new ArgumentNullException("assertion");
+                throw new ArgumentNullException(nameof(assertion));
             }
 
             return Assert(
@@ -118,12 +114,12 @@ namespace Nerven.Assertion
         {
             if (assertion == null)
             {
-                throw new ArgumentNullException("assertion");
+                throw new ArgumentNullException(nameof(assertion));
             }
 
             if (newException == null)
             {
-                throw new ArgumentNullException("newException");
+                throw new ArgumentNullException(nameof(newException));
             }
 
             return Assert(
@@ -146,12 +142,12 @@ namespace Nerven.Assertion
         {
             if (assertion == null)
             {
-                throw new ArgumentNullException("assertion");
+                throw new ArgumentNullException(nameof(assertion));
             }
 
             if (newException == null)
             {
-                throw new ArgumentNullException("newException");
+                throw new ArgumentNullException(nameof(newException));
             }
 
             return Assert(
@@ -175,7 +171,7 @@ namespace Nerven.Assertion
         {
             if (newException == null)
             {
-                throw new ArgumentNullException("newException");
+                throw new ArgumentNullException(nameof(newException));
             }
 
             return Assert(
@@ -200,7 +196,7 @@ namespace Nerven.Assertion
         {
             if (newException == null)
             {
-                throw new ArgumentNullException("newException");
+                throw new ArgumentNullException(nameof(newException));
             }
 
             if (!assertionResult)

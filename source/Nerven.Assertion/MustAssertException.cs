@@ -6,11 +6,6 @@ namespace Nerven.Assertion
     [Serializable]
     public class MustAssertException : Exception
     {
-        private readonly string _Description;
-        private readonly string _CallerFilePath;
-        private readonly int _CallerLineNumber;
-        private readonly string _CallerMemberName;
-
         public MustAssertException(
             string message = null,
             Exception innerException = null,
@@ -20,10 +15,10 @@ namespace Nerven.Assertion
             string callerMemberName = null)
             : base(message ?? (description == null ? "Assertion failed" : "Assertion '" + description + "' failed"), innerException)
         {
-            _Description = description;
-            _CallerFilePath = callerFilePath;
-            _CallerLineNumber = callerLineNumber;
-            _CallerMemberName = callerMemberName;
+            Description = description;
+            CallerFilePath = callerFilePath;
+            CallerLineNumber = callerLineNumber;
+            CallerMemberName = callerMemberName;
         }
 
         //// ReSharper disable once RedundantArgumentDefaultValue
@@ -46,41 +41,29 @@ namespace Nerven.Assertion
         {
             if (info != null)
             {
-                _Description = info.GetString("Description");
-                _CallerFilePath = info.GetString("CallerFilePath");
-                _CallerLineNumber = info.GetInt32("CallerLineNumber");
-                _CallerMemberName = info.GetString("CallerMemberName");
+                Description = info.GetString(nameof(Description));
+                CallerFilePath = info.GetString(nameof(CallerFilePath));
+                CallerLineNumber = info.GetInt32(nameof(CallerLineNumber));
+                CallerMemberName = info.GetString(nameof(CallerMemberName));
             }
         }
 
-        public string Description
-        {
-            get { return _Description; }
-        }
+        public string Description { get; }
 
-        public string CallerFilePath
-        {
-            get { return _CallerFilePath; }
-        }
+        public string CallerFilePath { get; }
 
-        public int CallerLineNumber
-        {
-            get { return _CallerLineNumber; }
-        }
+        public int CallerLineNumber { get; }
 
-        public string CallerMemberName
-        {
-            get { return _CallerMemberName; }
-        }
+        public string CallerMemberName { get; }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
 
-            info.AddValue("Description", _Description);
-            info.AddValue("CallerFilePath", _CallerFilePath);
-            info.AddValue("CallerLineNumber", _CallerLineNumber);
-            info.AddValue("CallerMemberName", _CallerMemberName);
+            info.AddValue(nameof(Description), Description);
+            info.AddValue(nameof(CallerFilePath), CallerFilePath);
+            info.AddValue(nameof(CallerLineNumber), CallerLineNumber);
+            info.AddValue(nameof(CallerMemberName), CallerMemberName);
         }
 
         public override string ToString()
@@ -89,22 +72,22 @@ namespace Nerven.Assertion
 
             _s += Message;
 
-            if (_CallerFilePath != null)
+            if (CallerFilePath != null)
             {
                 _s += Environment.NewLine;
 
-                _s += "Location: " + _CallerFilePath;
+                _s += "Location: " + CallerFilePath;
 
-                if (_CallerLineNumber > 0)
+                if (CallerLineNumber > 0)
                 {
-                    _s += ":" + _CallerLineNumber;
+                    _s += ":" + CallerLineNumber;
                 }
             }
 
-            if (_CallerMemberName != null)
+            if (CallerMemberName != null)
             {
                 _s += Environment.NewLine;
-                _s += "Member: " + _CallerMemberName;
+                _s += "Member: " + CallerMemberName;
             }
 
             return _s;

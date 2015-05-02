@@ -19,7 +19,7 @@ namespace Nerven.Assertion
         {
             if (assertion == null)
             {
-                throw new ArgumentNullException("assertion");
+                throw new ArgumentNullException(nameof(assertion));
             }
 
             return MustAssert.Instance.Assert(
@@ -58,7 +58,7 @@ namespace Nerven.Assertion
         {
             if (assertion == null)
             {
-                throw new ArgumentNullException("assertion");
+                throw new ArgumentNullException(nameof(assertion));
             }
 
             return MustAssert.Instance.Assert<TException>(
@@ -98,12 +98,12 @@ namespace Nerven.Assertion
         {
             if (assertion == null)
             {
-                throw new ArgumentNullException("assertion");
+                throw new ArgumentNullException(nameof(assertion));
             }
 
             if (newException == null)
             {
-                throw new ArgumentNullException("newException");
+                throw new ArgumentNullException(nameof(newException));
             }
 
             return MustAssert.Instance.Assert(
@@ -126,12 +126,12 @@ namespace Nerven.Assertion
         {
             if (assertion == null)
             {
-                throw new ArgumentNullException("assertion");
+                throw new ArgumentNullException(nameof(assertion));
             }
 
             if (newException == null)
             {
-                throw new ArgumentNullException("newException");
+                throw new ArgumentNullException(nameof(newException));
             }
 
             return MustAssert.Instance.Assert(
@@ -155,7 +155,7 @@ namespace Nerven.Assertion
         {
             if (newException == null)
             {
-                throw new ArgumentNullException("newException");
+                throw new ArgumentNullException(nameof(newException));
             }
 
             return MustAssert.Instance.Assert(
@@ -179,7 +179,7 @@ namespace Nerven.Assertion
         {
             if (newException == null)
             {
-                throw new ArgumentNullException("newException");
+                throw new ArgumentNullException(nameof(newException));
             }
 
             return MustAssert.Instance.Assert(
