@@ -10,12 +10,11 @@ namespace Nerven.Assertion.Tests
         {
             yield return new object[] { MustAssert.Instance };
             yield return new object[] { Must.Assert(true) };
-            yield return new object[] { Must.Assert(() => true) };
             yield return new object[] { Must.Assert<InvalidOperationException>(true) };
-            yield return new object[] { Must.Assert<ArgumentOutOfRangeException>(() => true) };
+            yield return new object[] { Must.Assert<ArgumentOutOfRangeException>(true) };
             yield return new object[] { Must.Assert<InvalidOperationException>(true).Assert(true) };
-            yield return new object[] { Must.Assert(true).Assert<ArgumentOutOfRangeException>(() => true).Assert<InvalidOperationException>(true) };
-            yield return new object[] { Must.Assert(true).Assert<ArgumentOutOfRangeException>(() => true).Assert<InvalidOperationException>(true).Assert(true) };
+            yield return new object[] { Must.Assert(true).Assert<ArgumentOutOfRangeException>(true).Assert<InvalidOperationException>(true) };
+            yield return new object[] { Must.Assert(true).Assert<ArgumentOutOfRangeException>(true).Assert<InvalidOperationException>(true).Assert(true) };
         }
 
         [Fact]
@@ -44,12 +43,6 @@ namespace Nerven.Assertion.Tests
         }
 
         [Fact]
-        public void TrueAssertionActionThrowsNoException()
-        {
-            MustAssert.Instance.Assert(() => true);
-        }
-
-        [Fact]
         public void FalseAssertionThrowsRightException()
         {
             Assert.Throws<MustAssertException>(() => MustAssert.Instance.Assert(false));
@@ -75,33 +68,15 @@ namespace Nerven.Assertion.Tests
         }
 
         [Fact]
-        public void FalseAssertionActionThrowsRightException()
-        {
-            Assert.Throws<MustAssertException>(() => MustAssert.Instance.Assert(() => false));
-        }
-
-        [Fact]
         public void TrueAssertionWithCustomExceptionTypeParameterThrowsNoException()
         {
             MustAssert.Instance.Assert<ArgumentException>(true);
         }
 
         [Fact]
-        public void TrueAssertionWithCustomExceptionTypeParameterActionThrowsNoException()
-        {
-            MustAssert.Instance.Assert<ArgumentException>(() => true);
-        }
-
-        [Fact]
         public void FalseAssertionWithCustomExceptionTypeParameterThrowsRightException()
         {
             Assert.Throws<ArgumentException>(() => MustAssert.Instance.Assert<ArgumentException>(false));
-        }
-
-        [Fact]
-        public void FalseAssertionWithCustomExceptionTypeParameterActionThrowsRightException()
-        {
-            Assert.Throws<ArgumentException>(() => MustAssert.Instance.Assert<ArgumentException>(() => false));
         }
 
         [Fact]

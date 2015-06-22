@@ -21,28 +21,6 @@ namespace Nerven.Assertion
         public static MustAssert Instance { get; } = new MustAssert();
 
         //// ReSharper disable ExplicitCallerInfoArgument
-        [DebuggerHidden]
-        public MustAssert Assert(
-            [InstantHandle] Func<bool> assertion,
-            string description = null,
-            [CallerFilePath] string callerFilePath = null,
-            [CallerLineNumber] int callerLineNumber = 0,
-            [CallerMemberName] string callerMemberName = null)
-        {
-            if (assertion == null)
-            {
-                throw new ArgumentNullException(nameof(assertion));
-            }
-
-            return Assert(
-                assertion,
-                _e => _e,
-                description: description,
-                callerFilePath: callerFilePath,
-                callerLineNumber: callerLineNumber,
-                callerMemberName: callerMemberName);
-        }
-
         [ContractAnnotation("assertionResult:false => halt")]
         [DebuggerHidden]
         public MustAssert Assert(
@@ -55,29 +33,6 @@ namespace Nerven.Assertion
             return Assert(
                 assertionResult,
                 _e => _e,
-                description: description,
-                callerFilePath: callerFilePath,
-                callerLineNumber: callerLineNumber,
-                callerMemberName: callerMemberName);
-        }
-
-        [DebuggerHidden]
-        public MustAssert Assert<TException>(
-            [InstantHandle] Func<bool> assertion,
-            string description = null,
-            [CallerFilePath] string callerFilePath = null,
-            [CallerLineNumber] int callerLineNumber = 0,
-            [CallerMemberName] string callerMemberName = null)
-            where TException : Exception, new()
-        {
-            if (assertion == null)
-            {
-                throw new ArgumentNullException(nameof(assertion));
-            }
-
-            return Assert(
-                assertion,
-                _InitializeException<TException>,
                 description: description,
                 callerFilePath: callerFilePath,
                 callerLineNumber: callerLineNumber,
@@ -97,62 +52,6 @@ namespace Nerven.Assertion
             return Assert(
                 assertionResult,
                 _InitializeException<TException>,
-                description: description,
-                callerFilePath: callerFilePath,
-                callerLineNumber: callerLineNumber,
-                callerMemberName: callerMemberName);
-        }
-
-        [DebuggerHidden]
-        public MustAssert Assert(
-            [InstantHandle] Func<bool> assertion,
-            [InstantHandle] Func<Exception> newException,
-            string description = null,
-            [CallerFilePath] string callerFilePath = null,
-            [CallerLineNumber] int callerLineNumber = 0,
-            [CallerMemberName] string callerMemberName = null)
-        {
-            if (assertion == null)
-            {
-                throw new ArgumentNullException(nameof(assertion));
-            }
-
-            if (newException == null)
-            {
-                throw new ArgumentNullException(nameof(newException));
-            }
-
-            return Assert(
-                assertion(),
-                newException,
-                description: description,
-                callerFilePath: callerFilePath,
-                callerLineNumber: callerLineNumber,
-                callerMemberName: callerMemberName);
-        }
-
-        [DebuggerHidden]
-        public MustAssert Assert(
-            [InstantHandle] Func<bool> assertion,
-            [InstantHandle] Func<MustAssertException, Exception> newException,
-            string description = null,
-            [CallerFilePath] string callerFilePath = null,
-            [CallerLineNumber] int callerLineNumber = 0,
-            [CallerMemberName] string callerMemberName = null)
-        {
-            if (assertion == null)
-            {
-                throw new ArgumentNullException(nameof(assertion));
-            }
-
-            if (newException == null)
-            {
-                throw new ArgumentNullException(nameof(newException));
-            }
-
-            return Assert(
-                assertion(),
-                newException,
                 description: description,
                 callerFilePath: callerFilePath,
                 callerLineNumber: callerLineNumber,
