@@ -19,6 +19,18 @@ namespace Nerven.Assertion.Tests
         }
 
         [Fact]
+        public void TrueAssertionWithCustomExceptionThrowsNoException()
+        {
+            Must.Assert(true, _e => new ArgumentException(null, _e));
+        }
+
+        [Fact]
+        public void FalseAssertionWithCustomExceptionThrowsRightException()
+        {
+            Assert.Throws<ArgumentException>(() => Must.Assert(false, _e => new ArgumentException(null, _e)));
+        }
+
+        [Fact]
         public void TrueAssertionWithCustomExceptionTypeParameterThrowsNoException()
         {
             Must.Assert<ArgumentException>(true);
