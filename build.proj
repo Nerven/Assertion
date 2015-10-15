@@ -29,6 +29,8 @@
       Condition="$(NervenNuGetExe) == '' OR $(NervenNuGetExe) == '*Undefined*'">$(NuGet)</NervenNuGetExe>
     <NervenNuGetExe
       Condition="$(NervenNuGetExe) == '' OR $(NervenNuGetExe) == '*Undefined*'">$(NervenSolutionDir)\packages\NuGet.exe</NervenNuGetExe>
+    <NervenNuGetExeDownloadSource
+      Condition="$(NervenNuGetExeDownloadSource) == '' OR $(NervenNuGetExeDownloadSource) == '*Undefined*'">https://dist.nuget.org/win-x86-commandline/latest/nuget.exe</NervenNuGetExeDownloadSource>
     <NervenTestAssembliesInclude
       Condition="$(NervenTestAssembliesInclude) == '' OR $(NervenTestAssembliesInclude) == '*Undefined*'">$(NervenSolutionDir)\tests\**\bin\$(NervenConfiguration)\$(NervenSolutionName).Tests*.dll</NervenTestAssembliesInclude>
     <NervenInstallByggeNugetPackageCommand
@@ -128,6 +130,7 @@
     <Message Text="NervenSolutionName: $(NervenSolutionName);" />
     <Message Text="NervenSolutionFile: $(NervenSolutionFile);" />
     <Message Text="NervenNuGetExe: $(NervenNuGetExe);" />
+    <Message Text="NervenNuGetExeDownloadSource: $(NervenNuGetExeDownloadSource);" />
     <Message Text="NervenTestAssembliesInclude: $(NervenTestAssembliesInclude);" />
     <Message Text="NervenInstallByggeNugetPackageCommand: $(NervenInstallByggeNugetPackageCommand);" />
     <Message Text="NervenInstallGitVersionTaskNugetPackageCommand: $(NervenInstallGitVersionTaskNugetPackageCommand);" />
@@ -137,7 +140,7 @@
     <DownloadFile
       Condition="!Exists('$(NervenNuGetExe)')"
       FileName="$(NervenNuGetExe)"
-      Address="https://nuget.org/nuget.exe" />
+      Address="$(NervenNuGetExeDownloadSource)" />
     <Exec
       Command="$(NervenInstallByggeNugetPackageCommand)" />
     <Exec
