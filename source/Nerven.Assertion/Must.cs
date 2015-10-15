@@ -100,7 +100,57 @@ namespace Nerven.Assertion
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMemberName = null)
         {
-            throw new MustAssertException(
+            return MustAssert._Instance._Never(
+                description: description,
+                callerFilePath: callerFilePath,
+                callerLineNumber: callerLineNumber,
+                callerMemberName: callerMemberName);
+        }
+
+        [ContractAnnotation("=> halt")]
+        [DebuggerHidden]
+        public static Exception Never<TException>(
+            string description = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMemberName = null)
+            where TException : Exception, new()
+        {
+            return MustAssert._Instance._Never<TException>(
+                description: description,
+                callerFilePath: callerFilePath,
+                callerLineNumber: callerLineNumber,
+                callerMemberName: callerMemberName);
+        }
+
+        [ContractAnnotation("=> halt")]
+        [DebuggerHidden]
+        public static Exception Never(
+            [InstantHandle] Func<Exception> newException,
+            string description = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMemberName = null)
+        {
+            return MustAssert._Instance._Never(
+                newException,
+                description: description,
+                callerFilePath: callerFilePath,
+                callerLineNumber: callerLineNumber,
+                callerMemberName: callerMemberName);
+        }
+
+        [ContractAnnotation("=> halt")]
+        [DebuggerHidden]
+        public static Exception Never(
+            [InstantHandle] Func<MustAssertException, Exception> newException,
+            string description = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMemberName = null)
+        {
+            return MustAssert._Instance._Never(
+                newException,
                 description: description,
                 callerFilePath: callerFilePath,
                 callerLineNumber: callerLineNumber,

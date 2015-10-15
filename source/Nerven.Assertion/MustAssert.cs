@@ -100,16 +100,103 @@ namespace Nerven.Assertion
 
             if (!assertionResult)
             {
-                var _innerException = new MustAssertException(
+                throw _GetException(
+                    newException,
                     description: description,
                     callerFilePath: callerFilePath,
                     callerLineNumber: callerLineNumber,
                     callerMemberName: callerMemberName);
-
-                throw newException(_innerException) ?? _innerException;
             }
 
             return this;
+        }
+
+        [ContractAnnotation("=> halt")]
+        [DebuggerHidden]
+        internal Exception _Never(
+            string description,
+            string callerFilePath,
+            int callerLineNumber,
+            string callerMemberName)
+        {
+            return _Never(
+                _e => _e,
+                description: description,
+                callerFilePath: callerFilePath,
+                callerLineNumber: callerLineNumber,
+                callerMemberName: callerMemberName);
+        }
+
+        [ContractAnnotation("=> halt")]
+        [DebuggerHidden]
+        internal Exception _Never<TException>(
+            string description,
+            string callerFilePath,
+            int callerLineNumber,
+            string callerMemberName)
+            where TException : Exception, new()
+        {
+            return _Never(
+                _InitializeException<TException>,
+                description: description,
+                callerFilePath: callerFilePath,
+                callerLineNumber: callerLineNumber,
+                callerMemberName: callerMemberName);
+        }
+
+        [ContractAnnotation("=> halt")]
+        [DebuggerHidden]
+        internal Exception _Never(
+            [InstantHandle] Func<Exception> newException,
+            string description,
+            string callerFilePath,
+            int callerLineNumber,
+            string callerMemberName)
+        {
+            return _Never(
+                _innerException => newException(),
+                description: description,
+                callerFilePath: callerFilePath,
+                callerLineNumber: callerLineNumber,
+                callerMemberName: callerMemberName);
+        }
+
+        [ContractAnnotation("=> halt")]
+        [DebuggerHidden]
+        internal Exception _Never(
+            [InstantHandle] Func<MustAssertException, Exception> newException,
+            string description,
+            string callerFilePath,
+            int callerLineNumber,
+            string callerMemberName)
+        {
+            throw _GetException(
+                newException,
+                description: description,
+                callerFilePath: callerFilePath,
+                callerLineNumber: callerLineNumber,
+                callerMemberName: callerMemberName);
+        }
+
+        private Exception _GetException(
+            [InstantHandle] Func<MustAssertException, Exception> newException,
+            string description,
+            string callerFilePath,
+            int callerLineNumber,
+            string callerMemberName)
+        {
+            if (newException == null)
+            {
+                throw new ArgumentNullException(nameof(newException));
+            }
+
+            var _innerException = new MustAssertException(
+                description: description,
+                callerFilePath: callerFilePath,
+                callerLineNumber: callerLineNumber,
+                callerMemberName: callerMemberName);
+
+            return newException(_innerException) ?? _innerException;
         }
 
         private static TException _InitializeException<TException>(MustAssertException innerException)

@@ -49,9 +49,36 @@ namespace Nerven.Assertion.Tests
         }
 
         [Fact]
-        public void NeverWithDescrptionThrows()
+        public void NeverWithDescriptionThrows()
         {
             Assert.Throws<MustAssertException>(() => Must.Never("X"));
+        }
+        
+        [Fact]
+        public void NeverWithDescriptionThrowsWithExcpectedExceptionMessage()
+        {
+            var _actualException = Assert.Throws<MustAssertException>(() => Must.Never("Custom description expected in exception message."));
+            Assert.Contains("Custom description expected in exception message.", _actualException.Message);
+        }
+
+        [Fact]
+        public void NeverWithCustomExceptionThrowsRightException()
+        {
+            Assert.Throws<ArgumentException>(() => Must.Never(_e => new ArgumentException(null, _e)));
+        }
+
+        [Fact]
+        public void NeverWithCustomExceptionTypeParamterThrowsRightException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Must.Never<ArgumentOutOfRangeException>());
+        }
+
+        [Fact]
+        public void NeverWithCustomExceptionTypeParamterThrowsExceptionWithMustInnerException()
+        {
+            var _actualException = Assert.Throws<InvalidOperationException>(() => Must.Never<InvalidOperationException>());
+
+            Assert.IsType<MustAssertException>(_actualException.InnerException);
         }
 
         [Fact]
@@ -59,8 +86,8 @@ namespace Nerven.Assertion.Tests
         {
             var _relevantMethods = typeof(Must)
                 .GetMethods()
-                .Where(_method => _method.Name.Equals("Assert", StringComparison.Ordinal))
-                .Where(_method => _method.GetParameters().Any(_methodPatarameter => _methodPatarameter.Name.Equals("assertionResult", StringComparison.Ordinal)))
+                .Where(_method => _method.Name.Equals("Assert", StringComparison.Ordinal) || _method.Name.Equals("Never", StringComparison.Ordinal))
+                .Where(_method => _method.GetParameters().Any(_methodPatarameter => _methodPatarameter.Name.Equals("description", StringComparison.Ordinal)))
                 .ToArray();
 
             Assert.True(_relevantMethods.Length > 0);
