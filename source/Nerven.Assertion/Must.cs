@@ -18,7 +18,7 @@ namespace Nerven.Assertion
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMemberName = null)
         {
-            return MustAssert.Instance.Assert(
+            return MustAssert._Instance.Assert(
                 assertionResult,
                 description: description,
                 callerFilePath: callerFilePath,
@@ -36,7 +36,7 @@ namespace Nerven.Assertion
             [CallerMemberName] string callerMemberName = null)
             where TException : Exception, new()
         {
-            return MustAssert.Instance.Assert<TException>(
+            return MustAssert._Instance.Assert<TException>(
                 assertionResult,
                 description: description,
                 callerFilePath: callerFilePath,
@@ -59,7 +59,7 @@ namespace Nerven.Assertion
                 throw new ArgumentNullException(nameof(newException));
             }
 
-            return MustAssert.Instance.Assert(
+            return MustAssert._Instance.Assert(
                 assertionResult,
                 newException,
                 description: description,
@@ -83,7 +83,7 @@ namespace Nerven.Assertion
                 throw new ArgumentNullException(nameof(newException));
             }
 
-            return MustAssert.Instance.Assert(
+            return MustAssert._Instance.Assert(
                 assertionResult,
                 newException,
                 description: description,

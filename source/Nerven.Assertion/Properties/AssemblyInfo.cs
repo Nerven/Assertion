@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("Nerven.Assertion")]
 [assembly: AssemblyDescription("")]
@@ -9,3 +10,5 @@
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion("1.0.0.0")]
+
+[assembly: InternalsVisibleTo("Nerven.Assertion.Tests")]

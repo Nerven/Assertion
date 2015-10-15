@@ -18,7 +18,7 @@ namespace Nerven.Assertion
         {
         }
 
-        public static MustAssert Instance { get; } = new MustAssert();
+        internal static MustAssert _Instance { get; } = new MustAssert();
 
         //// ReSharper disable ExplicitCallerInfoArgument
         [ContractAnnotation("assertionResult:false => halt")]

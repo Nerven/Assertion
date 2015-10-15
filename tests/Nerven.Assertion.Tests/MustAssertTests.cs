@@ -8,7 +8,7 @@ namespace Nerven.Assertion.Tests
     {
         public static IEnumerable<object[]> GetReturnedInstanceAlwaysSameAsInstanceTheoryData()
         {
-            yield return new object[] { MustAssert.Instance };
+            yield return new object[] { MustAssert._Instance };
             yield return new object[] { Must.Assert(true) };
             yield return new object[] { Must.Assert<InvalidOperationException>(true) };
             yield return new object[] { Must.Assert<ArgumentOutOfRangeException>(true) };
@@ -20,32 +20,32 @@ namespace Nerven.Assertion.Tests
         [Fact]
         public void InstanceNeverNull()
         {
-            Assert.NotNull(MustAssert.Instance);
+            Assert.NotNull(MustAssert._Instance);
         }
 
         [Fact]
         public void InstanceAlwaysSame()
         {
-            Assert.Same(MustAssert.Instance, MustAssert.Instance);
+            Assert.Same(MustAssert._Instance, MustAssert._Instance);
         }
 
         [Theory]
         [MemberData("GetReturnedInstanceAlwaysSameAsInstanceTheoryData")]
         public void ReturnedInstanceAlwaysSameAsInstance(MustAssert assert)
         {
-            Assert.Same(MustAssert.Instance, assert);
+            Assert.Same(MustAssert._Instance, assert);
         }
 
         [Fact]
         public void TrueAssertionThrowsNoException()
         {
-            MustAssert.Instance.Assert(true);
+            MustAssert._Instance.Assert(true);
         }
 
         [Fact]
         public void FalseAssertionThrowsRightException()
         {
-            Assert.Throws<MustAssertException>(() => MustAssert.Instance.Assert(false));
+            Assert.Throws<MustAssertException>(() => MustAssert._Instance.Assert(false));
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace Nerven.Assertion.Tests
         {
             try
             {
-                MustAssert.Instance.Assert(false, "Description test");
+                MustAssert._Instance.Assert(false, "Description test");
             }
             catch (Exception _exception)
             {
@@ -70,13 +70,13 @@ namespace Nerven.Assertion.Tests
         [Fact]
         public void TrueAssertionWithCustomExceptionTypeParameterThrowsNoException()
         {
-            MustAssert.Instance.Assert<ArgumentException>(true);
+            MustAssert._Instance.Assert<ArgumentException>(true);
         }
 
         [Fact]
         public void FalseAssertionWithCustomExceptionTypeParameterThrowsRightException()
         {
-            Assert.Throws<ArgumentException>(() => MustAssert.Instance.Assert<ArgumentException>(false));
+            Assert.Throws<ArgumentException>(() => MustAssert._Instance.Assert<ArgumentException>(false));
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace Nerven.Assertion.Tests
             try
             {
                 //// ReSharper disable once NotResolvedInText
-                MustAssert.Instance.Assert<ArgumentException>(false, "Description test");
+                MustAssert._Instance.Assert<ArgumentException>(false, "Description test");
             }
             catch (ArgumentException _thrownException)
             {
@@ -109,7 +109,7 @@ namespace Nerven.Assertion.Tests
         public void FalseAssertionWithCustomExceptionThrowsRightException()
         {
             //// ReSharper disable once NotResolvedInText
-            Assert.Throws<ArgumentException>(() => MustAssert.Instance.Assert(false, _innerException => new ArgumentException("Message", "Parameter", _innerException)));
+            Assert.Throws<ArgumentException>(() => MustAssert._Instance.Assert(false, _innerException => new ArgumentException("Message", "Parameter", _innerException)));
         }
 
         [Fact]
@@ -118,7 +118,7 @@ namespace Nerven.Assertion.Tests
             try
             {
                 //// ReSharper disable once NotResolvedInText
-                MustAssert.Instance.Assert(false, _innerException => new ArgumentException("Message", "Parameter", _innerException), "Description test");
+                MustAssert._Instance.Assert(false, _innerException => new ArgumentException("Message", "Parameter", _innerException), "Description test");
             }
             catch (ArgumentException _thrownException)
             {
