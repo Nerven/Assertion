@@ -44,15 +44,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\MustAssertableExtensions.ArgumentNullException.cs" />
+    <Compile Include="Extensions\MustAssertableExtensions.cs" />
+    <Compile Include="Helpers\AssertionExceptionHelper.cs" />
+    <Compile Include="Helpers\AssertionRecordHelper.cs" />
+    <Compile Include="Helpers\CustomExceptionHelper.cs" />
+    <Compile Include="Helpers\ExceptionHelper.cs" />
     <Compile Include="Must.cs" />
-    <Compile Include="MustAssert.cs" />
-    <Compile Include="MustAssertException.cs" />
+    <Compile Include="IMustAssertable.cs" />
+    <Compile Include="MustAssertion.cs" />
+    <Compile Include="MustAssertionApi.cs" />
+    <Compile Include="MustAssertionData.cs" />
+    <Compile Include="MustAssertionException.cs" />
+    <Compile Include="MustAssertableExtensions.AssertNever.cs" />
+    <Compile Include="MustAssertableExtensions.Assert.cs" />
+    <Compile Include="MustAssertableExtensions.AssumeNever.cs" />
+    <Compile Include="MustAssertableExtensions.Assume.cs" />
+    <Compile Include="MustAssertableExtensions.cs" />
+    <Compile Include="MustAssertableExtensions.WithData.cs" />
+    <Compile Include="MustAssertionRecord.cs" />
+    <Compile Include="MustAssertionReport.cs" />
+    <Compile Include="MustAssertionType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResolveMustAssertionData.cs" />
+    <Compile Include="ResolveMustAssertionDatas.cs" />
+    <Compile Include="TransformExceptionDelegate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Nerven.Assertion.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
