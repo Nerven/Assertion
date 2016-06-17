@@ -1,126 +1,167 @@
 ﻿using System;
 using System.Linq;
-using Nerven.Assertion.Extensions;
+using System.Reactive.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Xunit;
 
-//// ReSharper disable MemberCanBePrivate.Global
 namespace Nerven.Assertion.Tests
 {
+    [Collection("ExclusiveAccess_MustAssertionApi.ReportSource")]
     public sealed class UseCases
     {
-        public static Uri[] ConvertAbsoluteUrisToRelativeBasic(Uri baseUri, params Uri[] absoluteUris)
+        [Fact]
+        public void Demo1()
         {
             Must.Assertion
-                .Assert(baseUri != null)
-                .Assert(baseUri.IsAbsoluteUri)
-                .Assert(absoluteUris != null);
-
-            return absoluteUris.Select(_absoluteUri =>
-            {
-                Must.Assertion
-                    .Assert(_absoluteUri != null)
-                    .Assert(_absoluteUri.IsAbsoluteUri)
-                    .Assert(baseUri.IsBaseOf(_absoluteUri));
-
-                return new Uri(
-                    _absoluteUri.AbsoluteUri.Substring(baseUri.AbsoluteUri.Length),
-                    UriKind.Relative);
-            }).ToArray();
+                .Assert(int.Parse("1") == 1)
+                .Assume(() => int.Parse("2") == 1);
         }
 
-        public static Uri[] ConvertAbsoluteUrisToRelativePerfect(Uri baseUri, params Uri[] absoluteUris)
+        [Fact]
+        public void Demo2()
         {
+            var _reportNumber = 0;
+            MustAssertionApi.ReportSource.ForEachAsync(_report =>
+                {
+                    _reportNumber++;
+                });
+
+            var _exception = Assert.Throws<MustAssertionException>(() =>
+                Must.Assertion
+                    .Assert(int.Parse("2") == 1));
+            var _memberNameFilePathLineNumber = _GetCallerMemberNameAndFilePathAndLineNumber(-1);
+
+            Assert.Equal(0, _exception.AssertionRecord?.Data?.Count);
+            Assert.Equal(nameof(Demo2), _exception.AssertionRecord?.CallerMemberName);
+            Assert.Equal(_memberNameFilePathLineNumber.Item1, _exception.AssertionRecord?.CallerMemberName);
+            Assert.Equal(_memberNameFilePathLineNumber.Item2, _exception.AssertionRecord?.CallerFilePath);
+            Assert.Equal(_memberNameFilePathLineNumber.Item3, _exception.AssertionRecord?.CallerLineNumber);
+
+            Assert.Equal(1, _reportNumber);
+        }
+
+        [Fact]
+        public void Demo3()
+        {
+            var _exception = Assert.Throws<MustAssertionException>(() =>
+                Must.Assertion
+                    .UsingData("X", () => 1)
+                    ////.WithData(_add => _add("X", typeof(int), 4))
+                    .Assert(int.Parse("1") == 1)
+                    .Assert(int.Parse("2") == 1)
+                    .Assert(int.Parse("3") == 3));
+            var _memberNameFilePathLineNumber = _GetCallerMemberNameAndFilePathAndLineNumber(-2);
+
+            Assert.Equal(1, _exception.AssertionRecord?.Data?.Count);
+            var _dataItem = _exception.AssertionRecord?.Data?.SingleOrDefault();
+            Assert.Equal("X", _dataItem?.Key);
+            Assert.Equal(1, _dataItem?.Value);
+            Assert.Equal(nameof(Demo3), _exception.AssertionRecord?.CallerMemberName);
+            Assert.Equal(_memberNameFilePathLineNumber.Item1, _exception.AssertionRecord?.CallerMemberName);
+            Assert.Equal(_memberNameFilePathLineNumber.Item2, _exception.AssertionRecord?.CallerFilePath);
+            Assert.Equal(_memberNameFilePathLineNumber.Item3, _exception.AssertionRecord?.CallerLineNumber);
+            Assert.Equal(Assembly.GetExecutingAssembly().FullName, _exception.AssertionRecord?.AssemblyFullName);
+            Version _assemblyVersion;
+            Assert.True(Version.TryParse(_exception.AssertionRecord?.AssemblyVersion, out _assemblyVersion));
+        }
+
+        [Fact]
+        public void Demo4()
+        {
+            // ReSharper disable once InconsistentNaming
+            const bool Data0 = false;
+            // ReSharper disable once InconsistentNaming
+            const string Data1 = "1";
+            // ReSharper disable once InconsistentNaming
+            const int Data2 = 2;
+
             Must.Assertion
-                .UsingData(nameof(baseUri), () => baseUri)
-                .UsingData(nameof(absoluteUris), () => absoluteUris)
-                .AssertArgumentNotNull(baseUri, nameof(baseUri))
-                .Assert<ArgumentException>(baseUri.IsAbsoluteUri, $"{nameof(baseUri)} is an absolute URI")
-                .AssertArgumentNotNull(absoluteUris, nameof(absoluteUris));
+                .UsingData(() => new
+                {
+                    Data0,
+                    Data1,
+                    Data2
+                })
+                .Assert(int.Parse("1") == 1)
+                .Assert(int.Parse("2") == 2)
+                .Assert(int.Parse("3") == 3);
+        }
 
-            return absoluteUris.Select(_absoluteUri =>
-            {
+        [Fact]
+        public void Demo5()
+        {
+            var _exception = Assert.Throws<MustAssertionException>(() =>
                 Must.Assertion
-                    .UsingData(nameof(baseUri), () => baseUri)
-                    .UsingData(nameof(absoluteUris), () => absoluteUris)
-                    .Assert(_absoluteUri != null, $"{nameof(absoluteUris)} contains no null values")
-                    .Assert(_absoluteUri.IsAbsoluteUri, $"{nameof(absoluteUris)} contains only absolute URIs")
-                    .Assert(baseUri.IsBaseOf(_absoluteUri), $"{nameof(absoluteUris)} contains only URIs with {nameof(baseUri)} as base");
+                    .UsingData(() => MustAssertionData.Create("A", 4))
+                    .UsingData("B", () => 4)
+                    .UsingData(() => new[] { MustAssertionData.Create("C", 4), MustAssertionData.Create("D", 4) })
+                    .Assert(int.Parse("1") == 1)
+                    .Assert(int.Parse("2") == 1)
+                    .Assert(int.Parse("3") == 3));
 
-                return new Uri(
-                    _absoluteUri.AbsoluteUri.Substring(baseUri.AbsoluteUri.Length),
-                    UriKind.Relative);
-            }).ToArray();
+            Assert.Equal(4, _exception.AssertionRecord?.Data?.Count);
         }
 
-        // "Perfect code" usage, with custom exceptions and assertion descriptions
-        public static Uri[] ConvertRelativeUrisToAbsolute(Uri baseUri, params Uri[] relativeUris)
+        [Fact]
+        public void Demo6()
         {
-            Must.Assertion
-                .AssertArgumentNotNull(baseUri, nameof(baseUri))
-                .AssertArgumentNotNull(relativeUris, nameof(relativeUris))
-                .Assert<ArgumentException>(baseUri.IsAbsoluteUri, "baseUri is absolute");
+            var _reportNumber = 0;
+            MustAssertionApi.ReportSource.ForEachAsync(_report =>
+                {
+                    switch (_reportNumber)
+                    {
+                        case 0:
+                            Assert.Equal(MustAssertionType.Assume, _report.AssertionType);
+                            Assert.Equal(null, _report.AssertionRecord.Description);
+                            Assert.Equal(4, _report.AssertionRecord.Data?.Count);
+                            break;
+                        case 1:
+                            Assert.Equal(MustAssertionType.Assume, _report.AssertionType);
+                            Assert.Equal("Assumption failed sadly.", _report.AssertionRecord.Description);
+                            Assert.Equal(6, _report.AssertionRecord.Data?.Count);
+                            break;
+                        case 2:
+                            Assert.Equal(MustAssertionType.Assert, _report.AssertionType);
+                            Assert.Equal(null, _report.AssertionRecord.Description);
+                            Assert.Equal(7, _report.AssertionRecord.Data?.Count);
+                            break;
+                        default:
+                            Assert.False(true);
+                            break;
+                    }
 
-            return relativeUris.Select(_relativeUri =>
-            {
+                    _reportNumber++;
+                });
+
+            var _exception = Assert.Throws<MustAssertionException>(() =>
                 Must.Assertion
-                    .Assert<ArgumentException>(
-                        _relativeUri != null, "relativeUris contains no null values")
-                    .Assert<ArgumentException>(
-                        !_relativeUri.IsAbsoluteUri, "relativeUris contains only relative URIs");
+                    .UsingData(() => MustAssertionData.Create("A", 4))
+                    .UsingData("B", () => 4)
+                    .UsingData(() => new[] { MustAssertionData.Create("C", 4), MustAssertionData.Create("D", 4) })
+                    .Assume(() => int.Parse("1") == 1)
+                    .Assume(() => int.Parse("1") == 2)
+                    .UsingData("C", () => 5)
+                    .Assert(int.Parse("1") == 1)
+                    .UsingData("D", () => 6)
+                    .Assume(() => int.Parse("1") == 3, "Assumption failed sadly.")
+                    .UsingData("E", () => 7)
+                    .Assert(int.Parse("2") == 1)
+                    .Assume(() => int.Parse("1") == 1)
+                    .UsingData("F", () => 8)
+                    .Assert(int.Parse("3") == 3));
 
-                return new Uri(baseUri, _relativeUri);
-            }).ToArray();
+            Assert.Equal(7, _exception.AssertionRecord?.Data?.Count);
+            Assert.Equal(3, _reportNumber);
         }
 
-        [Fact]
-        public void ConvertAbsoluteUrisToRelativeBasicCase1()
+        private static Tuple<string, string, int> _GetCallerMemberNameAndFilePathAndLineNumber(
+            int lineNumberOffset,
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
-            var _exception = Assert.Throws<MustAssertionException>(() => ConvertAbsoluteUrisToRelativeBasic(
-                new Uri("http://example.com"),
-                new Uri("http://example.com/otto"),
-                new Uri("https://example.com/otto"),
-                new Uri("http://example.com/per/otto")));
-
-            Assert.Contains("Assertion failed", _exception.Message);
-            Assert.Equal("ConvertAbsoluteUrisToRelativeBasic", _exception.AssertionRecord.CallerMemberName);
-        }
-
-        [Fact]
-        public void ConvertAbsoluteUrisToRelativePerfectCase1()
-        {
-            var _exception = Assert.Throws<MustAssertionException>(() => ConvertAbsoluteUrisToRelativePerfect(
-                new Uri("http://example.com"),
-                new Uri("http://example.com/otto"),
-                new Uri("https://example.com/otto"),
-                new Uri("http://example.com/per/otto")));
-
-            Assert.Contains("Assertion failed: Asserts that absoluteUris contains only URIs with baseUri as base", _exception.Message);
-            Assert.Equal("ConvertAbsoluteUrisToRelativePerfect", _exception.AssertionRecord.CallerMemberName);
-        }
-
-        [Fact]
-        public void ConvertRelativeUrisToAbsoluteCase1()
-        {
-            var _exception = Assert.Throws<ArgumentException>(() => ConvertRelativeUrisToAbsolute(
-                new Uri("http://example.com/otto/per"),
-                new Uri("/otto", UriKind.Relative),
-                new Uri("./../otto", UriKind.Relative),
-                new Uri("../../per/otto", UriKind.Relative),
-                new Uri("https://example.com/otto")));
-
-            Assert.Contains("Assertion failed: Asserts that relativeUris contains only relative URIs", ((MustAssertionException)_exception.InnerException).Message);
-            Assert.Equal("ConvertRelativeUrisToAbsolute", ((MustAssertionException)_exception.InnerException).AssertionRecord.CallerMemberName);
-        }
-
-        [Fact]
-        public void ConvertRelativeUrisToAbsoluteCase2()
-        {
-            ConvertRelativeUrisToAbsolute(
-                new Uri("http://example.com/otto/per"),
-                new Uri("/otto", UriKind.Relative),
-                new Uri("./../otto", UriKind.Relative),
-                new Uri("../../per/otto", UriKind.Relative),
-                new Uri("../otto", UriKind.Relative));
+            return Tuple.Create(callerMemberName, callerFilePath, callerLineNumber + lineNumberOffset);
         }
     }
 }
