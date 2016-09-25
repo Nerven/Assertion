@@ -2,15 +2,20 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{95FA4151-916F-484D-8276-A6E40BF9C7B4}</ProjectGuid>
+    <ProjectGuid>{50A1DFD3-B249-413F-BCF2-5B083C183C8F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Nerven.Assertion</RootNamespace>
     <AssemblyName>Nerven.Assertion</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,18 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=9.1.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="Nerven.Assertion.nuspec" />
+    <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\MustAssertableExtensions.ArgumentNullException.cs" />
@@ -50,18 +46,19 @@
     <Compile Include="Helpers\AssertionRecordHelper.cs" />
     <Compile Include="Helpers\CustomExceptionHelper.cs" />
     <Compile Include="Helpers\ExceptionHelper.cs" />
-    <Compile Include="Must.cs" />
+    <Compile Include="Helpers\ReadOnlyCollectionHelper.cs" />
     <Compile Include="IMustAssertable.cs" />
+    <Compile Include="Must.cs" />
+    <Compile Include="MustAssertableExtensions.Assert.cs" />
+    <Compile Include="MustAssertableExtensions.AssertNever.cs" />
+    <Compile Include="MustAssertableExtensions.Assume.cs" />
+    <Compile Include="MustAssertableExtensions.AssumeNever.cs" />
+    <Compile Include="MustAssertableExtensions.cs" />
+    <Compile Include="MustAssertableExtensions.WithData.cs" />
     <Compile Include="MustAssertion.cs" />
     <Compile Include="MustAssertionApi.cs" />
     <Compile Include="MustAssertionData.cs" />
     <Compile Include="MustAssertionException.cs" />
-    <Compile Include="MustAssertableExtensions.AssertNever.cs" />
-    <Compile Include="MustAssertableExtensions.Assert.cs" />
-    <Compile Include="MustAssertableExtensions.AssumeNever.cs" />
-    <Compile Include="MustAssertableExtensions.Assume.cs" />
-    <Compile Include="MustAssertableExtensions.cs" />
-    <Compile Include="MustAssertableExtensions.WithData.cs" />
     <Compile Include="MustAssertionRecord.cs" />
     <Compile Include="MustAssertionReport.cs" />
     <Compile Include="MustAssertionType.cs" />
@@ -70,12 +67,7 @@
     <Compile Include="ResolveMustAssertionDatas.cs" />
     <Compile Include="TransformExceptionDelegate.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Nerven.Assertion.nuspec" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

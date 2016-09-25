@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
@@ -19,7 +18,7 @@ namespace Nerven.Assertion
         {
             must.Api.NeverAssumptionFailed(
                 description: description,
-                callerAssembly: Assembly.GetCallingAssembly(),
+                callerAssembly: null,
                 callerFilePath: callerFilePath,
                 callerLineNumber: callerLineNumber,
                 callerMemberName: callerMemberName);

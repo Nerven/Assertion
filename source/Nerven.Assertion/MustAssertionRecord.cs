@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Nerven.Assertion.Helpers;
 
 namespace Nerven.Assertion
 {
@@ -14,7 +15,7 @@ namespace Nerven.Assertion
             string assemblyFullName, 
             string assemblyVersion)
         {
-            Data = data?.ToList().AsReadOnly();
+            Data = ReadOnlyCollectionHelper.AsReadOnly(data?.ToList());
             Description = description;
             CallerFilePath = callerFilePath;
             CallerLineNumber = callerLineNumber;

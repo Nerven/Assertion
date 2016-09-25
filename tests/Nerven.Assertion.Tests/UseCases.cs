@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using Xunit;
 
@@ -61,9 +60,8 @@ namespace Nerven.Assertion.Tests
             Assert.Equal(_memberNameFilePathLineNumber.Item1, _exception.AssertionRecord?.CallerMemberName);
             Assert.Equal(_memberNameFilePathLineNumber.Item2, _exception.AssertionRecord?.CallerFilePath);
             Assert.Equal(_memberNameFilePathLineNumber.Item3, _exception.AssertionRecord?.CallerLineNumber);
-            Assert.Equal(Assembly.GetExecutingAssembly().FullName, _exception.AssertionRecord?.AssemblyFullName);
-            Version _assemblyVersion;
-            Assert.True(Version.TryParse(_exception.AssertionRecord?.AssemblyVersion, out _assemblyVersion));
+            Assert.Equal(null, _exception.AssertionRecord?.AssemblyFullName);
+            Assert.Equal(null, _exception.AssertionRecord?.AssemblyVersion);
         }
 
         [Fact]

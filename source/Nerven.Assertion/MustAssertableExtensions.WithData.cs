@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using JetBrains.Annotations;
 
 namespace Nerven.Assertion
@@ -56,8 +57,9 @@ namespace Nerven.Assertion
         {
             return dataContainer == null
                 ? Enumerable.Empty<MustAssertionData>()
-                : TypeDescriptor.GetProperties(dataContainer)
-                    .Cast<PropertyDescriptor>()
+                : dataContainer
+                    .GetType()
+                    .GetRuntimeProperties()
                     .Select(_property => MustAssertionData.Create(_property.Name, _property.PropertyType, _property.GetValue(dataContainer)));
         }
     }

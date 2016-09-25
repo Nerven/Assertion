@@ -94,7 +94,9 @@ namespace Nerven.Assertion.Helpers
 
         private static TransformExceptionDelegate _CreateExceptionConstructor(Type exceptionType)
         {
-            var _constructor = exceptionType.GetConstructors()
+            var _constructor = exceptionType
+                .GetTypeInfo()
+                .DeclaredConstructors
                 .Select(_c => new
                 {
                     Info = _c,
@@ -115,7 +117,7 @@ namespace Nerven.Assertion.Helpers
 
             if (_constructor != null && (_constructor.IsOnlyInnerException || _constructor.IsOnlyMessageAndInnerException || _constructor.IsEmptyConstructor))
             {
-                var _dynamicMethod = new DynamicMethod(string.Empty, _constructor.Info.DeclaringType, Array.ConvertAll(_constructor.Parameters, _p => _p.ParameterType), false);
+                var _dynamicMethod = new DynamicMethod(string.Empty, _constructor.Info.DeclaringType, _constructor.Parameters.Select(_p => _p.ParameterType).ToArray(), false);
                 var _il = _dynamicMethod.GetILGenerator();
 
                 var _ldargOpCodes = new[] { OpCodes.Ldarg_0, OpCodes.Ldarg_1 };

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using JetBrains.Annotations;
 
 namespace Nerven.Assertion
 {
     [PublicAPI]
-    [Serializable]
     public class MustAssertionException : Exception
     {
         public MustAssertionException(
@@ -36,21 +34,7 @@ namespace Nerven.Assertion
         {
         }
 
-        protected MustAssertionException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            throw new NotImplementedException();
-        }
-
         public MustAssertionRecord AssertionRecord { get; }
-
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-
-            info.AddValue(nameof(AssertionRecord), AssertionRecord);
-            throw new NotImplementedException();
-        }
 
         public override string ToString()
         {

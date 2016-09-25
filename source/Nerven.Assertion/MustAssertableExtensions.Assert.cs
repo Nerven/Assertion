@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Nerven.Assertion.Helpers;
@@ -27,7 +26,7 @@ namespace Nerven.Assertion
                 must.Api.AssertionFailed(
                     description: description,
                     transformException: transformException,
-                    callerAssembly: Assembly.GetCallingAssembly(),
+                    callerAssembly: null,
                     callerFilePath: callerFilePath,
                     callerLineNumber: callerLineNumber,
                     callerMemberName: callerMemberName);
@@ -53,7 +52,7 @@ namespace Nerven.Assertion
                 must.Api.AssertionFailed(
                     description: null,
                     transformException: transformException,
-                    callerAssembly: Assembly.GetCallingAssembly(),
+                    callerAssembly: null,
                     callerFilePath: callerFilePath,
                     callerLineNumber: callerLineNumber,
                     callerMemberName: callerMemberName);
@@ -81,7 +80,7 @@ namespace Nerven.Assertion
                 must.Api.AssertionFailed(
                     description: description,
                     transformException: CustomExceptionHelper.CreateCustomExceptionConstructorWithTransform(transformException),
-                    callerAssembly: Assembly.GetCallingAssembly(),
+                    callerAssembly: null,
                     callerFilePath: callerFilePath,
                     callerLineNumber: callerLineNumber,
                     callerMemberName: callerMemberName);
@@ -108,7 +107,7 @@ namespace Nerven.Assertion
                 must.Api.AssertionFailed(
                     description: null,
                     transformException: CustomExceptionHelper.CreateCustomExceptionConstructorWithTransform(transformException),
-                    callerAssembly: Assembly.GetCallingAssembly(),
+                    callerAssembly: null,
                     callerFilePath: callerFilePath,
                     callerLineNumber: callerLineNumber,
                     callerMemberName: callerMemberName);
