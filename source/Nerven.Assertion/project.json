@@ -1,13 +1,15 @@
-{
-  "supports": {},
-  "dependencies": {
-    "JetBrains.Annotations": "10.1.5",
-    "System.Reflection.Emit.Lightweight": "4.0.1",
-    "NETStandard.Library": "1.6.0"
-  },
-  "frameworks": {
-    "netstandard1.1": {
-        "imports": "dnxcore50"
+﻿{
+    "name": "Nerven.Assertion",
+    "authors": [ "Nerven" ],
+    "description": "A performant, easy to use, lightweight C# assertion library meant to be used in production runtime. Providing excellent error messages and logging/reporting capabilities. Makes it easy to take care of all unexpected states, catching them directly when they appear, thus making them easily traceable.",
+    "copyright": "Copyright © Victor Blomberg &lt;victor.blomberg@nerven.se&gt; and contributors.",
+    "supports": {},
+    "dependencies": {
+        "JetBrains.Annotations": "10.2.1",
+        "NETStandard.Library": "1.6.1",
+        "System.Reflection.Emit.Lightweight": "4.3.0"
+    },
+    "frameworks": {
+        "netstandard1.1": {}
     }
-  }
 }
