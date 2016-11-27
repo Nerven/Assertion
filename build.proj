@@ -23,10 +23,10 @@
       Condition="$(NervenSolutionName) == '' OR $(NervenSolutionName) == '*Undefined*'">$(MSBuildProjectName)</NervenSolutionName>
     <NervenSolutionFile
       Condition="$(NervenSolutionFile) == '' OR $(NervenSolutionFile) == '*Undefined*'">$(NervenSolutionDir)\$(NervenSolutionName).sln</NervenSolutionFile>
-    <NervenNuGetExe
+    <!-- To make sure NuGet isn't a pre-3.5 version, we ignore third party environment paths --><!--NervenNuGetExe
       Condition="$(NervenNuGetExe) == '' OR $(NervenNuGetExe) == '*Undefined*'">$(NuGetToolPath)</NervenNuGetExe>
     <NervenNuGetExe
-      Condition="$(NervenNuGetExe) == '' OR $(NervenNuGetExe) == '*Undefined*'">$(NuGet)</NervenNuGetExe>
+      Condition="$(NervenNuGetExe) == '' OR $(NervenNuGetExe) == '*Undefined*'">$(NuGet)</NervenNuGetExe-->
     <NervenNuGetExe
       Condition="$(NervenNuGetExe) == '' OR $(NervenNuGetExe) == '*Undefined*'">$(NervenSolutionDir)\packages\NuGet.exe</NervenNuGetExe>
     <NervenNuGetExeDownloadSource
