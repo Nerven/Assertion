@@ -106,31 +106,31 @@ namespace Nerven.Assertion.Tests
         {
             var _reportNumber = 0;
             MustAssertionApi.ReportSource.ForEachAsync(_report =>
+            {
+                switch (_reportNumber)
                 {
-                    switch (_reportNumber)
-                    {
-                        case 0:
-                            Assert.Equal(MustAssertionType.Assume, _report.AssertionType);
-                            Assert.Equal(null, _report.AssertionRecord.Description);
-                            Assert.Equal(4, _report.AssertionRecord.Data?.Count);
-                            break;
-                        case 1:
-                            Assert.Equal(MustAssertionType.Assume, _report.AssertionType);
-                            Assert.Equal("Assumption failed sadly.", _report.AssertionRecord.Description);
-                            Assert.Equal(6, _report.AssertionRecord.Data?.Count);
-                            break;
-                        case 2:
-                            Assert.Equal(MustAssertionType.Assert, _report.AssertionType);
-                            Assert.Equal(null, _report.AssertionRecord.Description);
-                            Assert.Equal(7, _report.AssertionRecord.Data?.Count);
-                            break;
-                        default:
-                            Assert.False(true);
-                            break;
-                    }
+                    case 0:
+                        Assert.Equal(MustAssertionType.Assume, _report.AssertionType);
+                        Assert.Equal(null, _report.AssertionRecord.Description);
+                        Assert.Equal(4, _report.AssertionRecord.Data?.Count);
+                        break;
+                    case 1:
+                        Assert.Equal(MustAssertionType.Assume, _report.AssertionType);
+                        Assert.Equal("Assumption failed sadly.", _report.AssertionRecord.Description);
+                        Assert.Equal(6, _report.AssertionRecord.Data?.Count);
+                        break;
+                    case 2:
+                        Assert.Equal(MustAssertionType.Assert, _report.AssertionType);
+                        Assert.Equal(null, _report.AssertionRecord.Description);
+                        Assert.Equal(7, _report.AssertionRecord.Data?.Count);
+                        break;
+                    default:
+                        Assert.False(true);
+                        break;
+                }
 
-                    _reportNumber++;
-                });
+                _reportNumber++;
+            });
 
             var _exception = Assert.Throws<MustAssertionException>(() =>
                 Must.Assertion
@@ -151,6 +151,62 @@ namespace Nerven.Assertion.Tests
 
             Assert.Equal(7, _exception.AssertionRecord?.Data?.Count);
             Assert.Equal(3, _reportNumber);
+        }
+
+        [Fact]
+        public void Demo7()
+        {
+            var _reportNumber = 0;
+            Action<MustAssertionReport> _onReport = _report =>
+            {
+                switch (_reportNumber)
+                {
+                    case 0:
+                        Assert.Equal(MustAssertionType.Assume, _report.AssertionType);
+                        Assert.Equal(null, _report.AssertionRecord.Description);
+                        Assert.Equal(4, _report.AssertionRecord.Data?.Count);
+                        break;
+                    case 1:
+                        Assert.Equal(MustAssertionType.Assume, _report.AssertionType);
+                        Assert.Equal("Assumption failed sadly.", _report.AssertionRecord.Description);
+                        Assert.Equal(6, _report.AssertionRecord.Data?.Count);
+                        break;
+                    case 2:
+                        Assert.Equal(MustAssertionType.Assert, _report.AssertionType);
+                        Assert.Equal(null, _report.AssertionRecord.Description);
+                        Assert.Equal(7, _report.AssertionRecord.Data?.Count);
+                        break;
+                    default:
+                        Assert.False(true);
+                        break;
+                }
+
+                _reportNumber++;
+            };
+
+            MustAssertionApi.NewReport += _onReport;
+
+            var _exception = Assert.Throws<MustAssertionException>(() =>
+                Must.Assertion
+                    .UsingData(() => MustAssertionData.Create("A", 4))
+                    .UsingData("B", () => 4)
+                    .UsingData(() => new[] { MustAssertionData.Create("C", 4), MustAssertionData.Create("D", 4) })
+                    .Assume(() => int.Parse("1") == 1)
+                    .Assume(() => int.Parse("1") == 2)
+                    .UsingData("C", () => 5)
+                    .Assert(int.Parse("1") == 1)
+                    .UsingData("D", () => 6)
+                    .Assume(() => int.Parse("1") == 3, "Assumption failed sadly.")
+                    .UsingData("E", () => 7)
+                    .Assert(int.Parse("2") == 1)
+                    .Assume(() => int.Parse("1") == 1)
+                    .UsingData("F", () => 8)
+                    .Assert(int.Parse("3") == 3));
+
+            Assert.Equal(7, _exception.AssertionRecord?.Data?.Count);
+            Assert.Equal(3, _reportNumber);
+
+            MustAssertionApi.NewReport -= _onReport;
         }
 
         private static Tuple<string, string, int> _GetCallerMemberNameAndFilePathAndLineNumber(

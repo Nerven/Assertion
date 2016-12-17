@@ -18,6 +18,9 @@ namespace Nerven.Assertion
         private static bool _EvaluateAssumptions = new MustAssertionOptions().EvaluateAssumptions;
         private static bool _ThrowOnFailedAssumptions = new MustAssertionOptions().ThrowOnFailedAssumptions;
 
+        [PublicAPI]
+        public static event Action<MustAssertionReport> NewReport;
+
         internal MustAssertionApi(Func<IEnumerable<ResolveMustAssertionDatas>> getDataResolvers)
         {
             _GetDataResolvers = getDataResolvers;
@@ -343,6 +346,8 @@ namespace Nerven.Assertion
                 {
                     _observer.Value.OnNext(report);
                 }
+
+                NewReport?.Invoke(report);
             }
 
             private void _Unsubscribe(int observerId)
