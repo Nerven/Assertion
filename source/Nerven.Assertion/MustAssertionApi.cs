@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Nerven.Assertion.Helpers;
 
@@ -26,6 +27,7 @@ namespace Nerven.Assertion
             _GetDataResolvers = getDataResolvers;
         }
 
+        [PublicAPI]
         public static IObservable<MustAssertionReport> ReportSource => _ReportSource;
 
         [PublicAPI]
@@ -342,10 +344,16 @@ namespace Nerven.Assertion
 
             public void Push(MustAssertionReport report)
             {
-                foreach (var _observer in _Observers.ToArray())
+                var _observers = _Observers.ToArray();
+                var _observerTasks = new Task[_observers.Length];
+
+                for (var _i = 0; _i < _observers.Length; _i++)
                 {
-                    _observer.Value.OnNext(report);
+                    var _observer = _observers[_i].Value;
+                    _observerTasks[_i] = Task.Run(() => _observer.OnNext(report));
                 }
+
+                Task.WaitAll(_observerTasks);
 
                 NewReport?.Invoke(report);
             }
