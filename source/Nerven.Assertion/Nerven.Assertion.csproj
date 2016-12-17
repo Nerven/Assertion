@@ -59,6 +59,7 @@
     <Compile Include="MustAssertionApi.cs" />
     <Compile Include="MustAssertionData.cs" />
     <Compile Include="MustAssertionException.cs" />
+    <Compile Include="MustAssertionOptions.cs" />
     <Compile Include="MustAssertionRecord.cs" />
     <Compile Include="MustAssertionReport.cs" />
     <Compile Include="MustAssertionType.cs" />

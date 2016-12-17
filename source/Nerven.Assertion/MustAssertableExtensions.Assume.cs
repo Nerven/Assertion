@@ -18,6 +18,9 @@ namespace Nerven.Assertion
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMemberName = null)
         {
+            if (!must.Api.EvaluateAssumptions)
+                return must;
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (getAsumptionPassed == null || !getAsumptionPassed())
             {

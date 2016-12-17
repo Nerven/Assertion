@@ -15,12 +15,35 @@ namespace Nerven.Assertion
 
         private readonly Func<IEnumerable<ResolveMustAssertionDatas>> _GetDataResolvers;
 
+        private static bool _EvaluateAssumptions = new MustAssertionOptions().EvaluateAssumptions;
+        private static bool _ThrowOnFailedAssumptions = new MustAssertionOptions().ThrowOnFailedAssumptions;
+
         internal MustAssertionApi(Func<IEnumerable<ResolveMustAssertionDatas>> getDataResolvers)
         {
             _GetDataResolvers = getDataResolvers;
         }
 
         public static IObservable<MustAssertionReport> ReportSource => _ReportSource;
+
+        [PublicAPI]
+        public bool EvaluateAssumptions => _EvaluateAssumptions;
+
+        [PublicAPI]
+        public static void Configure(MustAssertionOptions options)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            if (!options.EvaluateAssumptions && options.ThrowOnFailedAssumptions)
+            {
+                throw new ArgumentException($"{nameof(options.ThrowOnFailedAssumptions)} cannot be {true} when {nameof(options.EvaluateAssumptions)} is {false}.", nameof(options));
+            }
+
+            _EvaluateAssumptions = options.EvaluateAssumptions;
+            _ThrowOnFailedAssumptions = options.ThrowOnFailedAssumptions;
+        }
 
         [PublicAPI]
         public MustAssertionApi UsingData(ResolveMustAssertionData resolveData)
@@ -117,6 +140,15 @@ namespace Nerven.Assertion
             _ReportFailure(MustAssertionType.Assume, _record, out _reportErrorException);
 
             var _exception = ExceptionHelper.Combine(_resolveDataErrorExceptions, ExceptionHelper.Yield(_reportErrorException));
+
+            if (_ThrowOnFailedAssumptions)
+            {
+                throw AssertionExceptionHelper.CreateAssertionException(
+                    transformException: null,
+                    assertionRecord: _record,
+                    additionalExceptions: _exception);
+            }
+
             if (_exception != null)
             {
                 throw _exception;
@@ -146,6 +178,15 @@ namespace Nerven.Assertion
             _ReportFailure(MustAssertionType.AssumeNever, _record, out _reportErrorException);
 
             var _exception = ExceptionHelper.Combine(_resolveDataErrorExceptions, ExceptionHelper.Yield(_reportErrorException));
+
+            if (_ThrowOnFailedAssumptions)
+            {
+                throw AssertionExceptionHelper.CreateAssertionException(
+                    transformException: null,
+                    assertionRecord: _record,
+                    additionalExceptions: _exception);
+            }
+
             if (_exception != null)
             {
                 throw _exception;

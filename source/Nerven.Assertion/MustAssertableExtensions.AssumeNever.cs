@@ -16,6 +16,9 @@ namespace Nerven.Assertion
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMemberName = null)
         {
+            if (!must.Api.EvaluateAssumptions)
+                return must;
+
             must.Api.NeverAssumptionFailed(
                 description: description,
                 callerAssembly: null,
