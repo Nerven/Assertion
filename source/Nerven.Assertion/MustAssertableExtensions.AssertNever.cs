@@ -12,7 +12,7 @@ namespace Nerven.Assertion
         [AssertionMethod]
         [ContractAnnotation("=> halt")]
         [DebuggerHidden]
-        public static IMustAssertable AssertNever(
+        public static MustAssertionException AssertNever(
             this IMustAssertable must,
             string description,
             TransformExceptionDelegate transformException = null,
@@ -36,7 +36,7 @@ namespace Nerven.Assertion
         [AssertionMethod]
         [ContractAnnotation("=> halt")]
         [DebuggerHidden]
-        public static IMustAssertable AssertNever(
+        public static MustAssertionException AssertNever(
             this IMustAssertable must,
             TransformExceptionDelegate transformException = null,
             [CallerFilePath] string callerFilePath = null,
