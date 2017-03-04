@@ -1,4 +1,8 @@
-A performant, easy to use, lightweight C# assertion library meant to be used in production runtime. Providing excellent error messages and logging/reporting capabilities. Makes it easy to take care of all unexpected states, catching them directly when they appear, thus making them easily traceable.
+A performant, easy to use, lightweight C# assertion library meant to be used both during development and in production.
+Providing excellent error messages and logging/reporting capabilities.
+Makes it easy to take care of all unexpected states, catching them directly when they appear, thus making them easily traceable.
+
+Assertion targets .NET Standard 1.1 (netstandard1.1), and can thus be used in projects targeting .NET Framework 4.5 as well as projects targeting .NET Core (and lots of different portable versions).
 
 ### Quick examples
 

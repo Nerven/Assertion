@@ -6,14 +6,12 @@
     <version>$version$</version>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <projectUrl>https://nerven.se/</projectUrl>
+    <projectUrl>https://nerven.se/assertion/</projectUrl>
+    <iconUrl>https://nerven.se/external-assets/logo/256x256_png/nerven-assertion.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$title$</description>
+    <description>A performant, easy to use, lightweight C# assertion library meant to be used both during development and in production</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright © Victor Blomberg &lt;victor.blomberg@nerven.se&gt; and contributors.</copyright>
     <tags></tags>
   </metadata>
-  <files>
-    <file src="..\..\LICENSE.txt" target="lib\net452\" />
-  </files>
 </package>
