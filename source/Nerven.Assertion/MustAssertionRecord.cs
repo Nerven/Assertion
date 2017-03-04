@@ -7,15 +7,15 @@ namespace Nerven.Assertion
     public sealed class MustAssertionRecord
     {
         public MustAssertionRecord(
-            IReadOnlyList<MustAssertionData> data, 
-            string description, 
-            string callerFilePath, 
-            int? callerLineNumber, 
-            string callerMemberName, 
-            string assemblyFullName, 
+            IReadOnlyList<MustAssertionData> data,
+            string description,
+            string callerFilePath,
+            int? callerLineNumber,
+            string callerMemberName,
+            string assemblyFullName,
             string assemblyVersion)
         {
-            Data = ReadOnlyCollectionHelper.AsReadOnly(data?.ToList());
+            Data = (data ?? Enumerable.Empty<MustAssertionData>()).ToList().AsReadOnly();
             Description = description;
             CallerFilePath = callerFilePath;
             CallerLineNumber = callerLineNumber;
@@ -37,5 +37,10 @@ namespace Nerven.Assertion
         public string AssemblyFullName { get; }
 
         public string AssemblyVersion { get; }
+
+        public override string ToString()
+        {
+            return AssertionRecordHelper.BuildMessage(this);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using JetBrains.Annotations;
 
 namespace Nerven.Assertion
@@ -7,6 +8,11 @@ namespace Nerven.Assertion
     {
         public MustAssertionReport(DateTimeOffset timestamp, MustAssertionType assertionType, MustAssertionRecord assertionRecord)
         {
+            if (assertionRecord == null)
+            {
+                throw new ArgumentNullException(nameof(assertionRecord));
+            }
+
             Timestamp = timestamp;
             AssertionType = assertionType;
             AssertionRecord = assertionRecord;
@@ -20,5 +26,10 @@ namespace Nerven.Assertion
 
         [PublicAPI]
         public MustAssertionRecord AssertionRecord { get; }
+
+        public override string ToString()
+        {
+            return $"{AssertionType} {Timestamp.ToString(CultureInfo.InvariantCulture)}: {AssertionRecord}";
+        }
     }
 }
